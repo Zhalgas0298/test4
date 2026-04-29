@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[8:25 PM, 4/29/2026] .: <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -17,24 +17,50 @@
 
         /* --- ПЕРВАЯ СТРАНИЦА --- */
         section {
-            height: auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            j…
+[8:29 PM, 4/29/2026] .: <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        section {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
             text-align: center;
-            background-size: contain;
-            background-position: center;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            /* ИСПРАВЛЕНО: убран background-attachment: fixed — ломает мобильные */
         }
 
-        .photo-1 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('1.jpg'); }
-        .photo-2 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('2.jpg'); }
-        .photo-3 { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('3.jpg'); }
+        .photo-1 { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('1.jpg'); }
+        .photo-2 { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('2.jpg'); }
+        .photo-3 { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('3.jpg'); }
 
         .content-box {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 25px;
             border: 1px solid rgba(255,255,255,0.2);
@@ -57,25 +83,22 @@
             animation: pulse 2s infinite;
         }
 
-        /* --- НОВАЯ АНИМАЦИЯ ВЫХОДА СЛОВ --- */
         @keyframes wordReveal {
             from { opacity: 0; transform: translateY(20px); filter: blur(10px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
         .reveal-text {
-            opacity: 0; /* Изначально скрыты */
+            opacity: 0;
             animation: wordReveal 0.8s ease forwards;
         }
 
-        /* Задержки для каждого элемента, чтобы выходили по очереди */
         .delay-1 { animation-delay: 0.3s; }
         .delay-2 { animation-delay: 0.6s; }
         .delay-3 { animation-delay: 0.9s; }
         .delay-4 { animation-delay: 1.2s; }
         .delay-5 { animation-delay: 1.5s; }
 
-        /* --- ВТОРАЯ СТРАНИЦА --- */
         #info-page {
             display: none;
             position: fixed;
@@ -89,6 +112,8 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         .info-card {
@@ -113,6 +138,10 @@
             font-weight: bold;
         }
 
+        #main-scroll-content {
+            transition: opacity 0.8s ease;
+        }
+
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
@@ -122,10 +151,16 @@
 
 <div id="main-scroll-content">
     <section class="photo-1">
-        <div class="content-box"><h2>Помнишь?</h2><p>Это были крутые моменты!</p></div>
+        <div class="content-box">
+            <h2>Помнишь?</h2>
+            <p>Это были крутые моменты!</p>
+        </div>
     </section>
     <section class="photo-2">
-        <div class="content-box"><h2>Было весело!</h2><p>Но дальше — больше.</p></div>
+        <div class="content-box">
+            <h2>Было весело!</h2>
+            <p>Но дальше — больше.</p>
+        </div>
     </section>
     <section class="photo-3">
         <div class="content-box">
@@ -139,12 +174,11 @@
 <div id="info-page">
     <div class="info-card">
         <h1 class="reveal-text delay-1" style="font-family: 'Pacifico'; color: #ff4757; font-size: 35px;">Ждем тебя! 🎉</h1>
-        
         <div class="details">
             <p class="reveal-text delay-2">Дата: <b style="color:#ff4757">30 апреля</b></p>
             <p class="reveal-text delay-3">Время: <b style="color:#ff4757">18:00</b></p>
         </div><br>
-            <strong><p class="reveal-text delay-4"><b style="font-size: 25px;">Место:</b></p></strong>
+        <strong><p class="reveal-text delay-4"><b style="font-size: 25px;">Место:</b></p></strong>
         <a href="https://2gis.kz/astana/geo/70000001086700355" target="_blank" class="gis-btn reveal-text delay-5">
             📍 Построить маршрут
         </a>
@@ -158,22 +192,23 @@
     function startMusic() {
         if (!musicStarted) {
             music.volume = 0;
-            music.play();
+            music.play().catch(() => {});
             let fadeIn = setInterval(() => {
-                if (music.volume < 0.9) music.volume += 0.05;
+                if (music.volume < 0.95) music.volume = Math.min(1, music.volume + 0.05);
                 else { music.volume = 1; clearInterval(fadeIn); }
             }, 100);
             musicStarted = true;
         }
     }
 
-    window.addEventListener('scroll', startMusic);
+    window.addEventListener('scroll', startMusic, { passive: true });
 
     function revealSecret() {
         startMusic();
-        document.getElementById('main-scroll-content').style.opacity = '0';
+        const mainContent = document.getElementById('main-scroll-content');
+        mainContent.style.opacity = '0';
         setTimeout(() => {
-            document.getElementById('main-scroll-content').style.display = 'none';
+            mainContent.style.display = 'none';
             const infoPage = document.getElementById('info-page');
             infoPage.style.display = 'flex';
             setTimeout(() => { infoPage.style.opacity = '1'; }, 50);
